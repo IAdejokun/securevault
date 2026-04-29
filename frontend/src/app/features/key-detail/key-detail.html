@@ -1,0 +1,118 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">SecureVault</div>
+    <button class="back-btn" (click)="back()">← Back to keys</button>
+  </aside>
+
+  <main class="main">
+    @if (loading) {
+      <div class="loading">Loading...</div>
+    }
+
+    @if (error) {
+      <div class="error-msg">{{ error }}</div>
+    }
+
+    @if (key && !loading) {
+      <div class="detail-header">
+        <div>
+          <h2>{{ key.name }}</h2>
+          <code class="display-key">{{ key.display_key }}</code>
+        </div>
+        <span class="badge" [ngClass]="zoneBadgeClass(key.zone)">{{ key.zone }}</span>
+      </div>
+
+      @if (rotatedKey) {
+  <div class="created-banner">
+    <div class="banner-header">
+      <span class="banner-title">✓ Key rotated — copy your new key now. You won't see it again.</span>
+      <button class="banner-close" (click)="dismissRotatedKey()">✕</button>
+    </div>
+    <div class="raw-key-row">
+      <code class="raw-key">{{ rotatedKey.raw_key }}</code>
+      <button class="btn-copy" (click)="copyRawKey()">
+        {{ rawKeyCopied ? 'Copied!' : 'Copy' }}
+      </button>
+    </div>
+  </div>
+}
+
+      <div class="stats-strip">
+        <div class="stat">
+          <span class="stat-label">Status</span>
+          <span class="stat-value" [class.inactive]="!key.is_active">
+            {{ key.is_active ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Usage count</span>
+          <span class="stat-value">{{ key.usage_count }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Created</span>
+          <span class="stat-value">{{ key.created_at | date:'mediumDate' }}</span>
+        </div>
+        <div class="stat">
+  <span class="stat-label">Last rotated</span>
+  <span class="stat-value">
+    {{ key.rotated_at ? (key.rotated_at | date:'mediumDate') : '—' }}
+  </span>
+</div>
+  <div class="stat">
+  <span class="stat-label">Expires</span>
+  <span class="stat-value">
+    {{ key.expires_at ? (key.expires_at | date:'mediumDate') : 'No expiry' }}
+  </span>
+    </div>
+      </div>
+
+      @if (rotateError) {
+        <div class="error-msg">{{ rotateError }}</div>
+      }
+
+      @if (revokeError) {
+        <div class="error-msg">{{ revokeError }}</div>
+      }
+
+      @if (key.is_active) {
+        <div class="actions">
+          <button class="btn-secondary" (click)="rotate()" [disabled]="rotating">
+            {{ rotating ? 'Rotating...' : 'Rotate key' }}
+          </button>
+          <button class="btn-danger" (click)="confirmRevoke()" [disabled]="revoking">
+            Revoke key
+          </button>
+        </div>
+      }
+
+      @if (showRevokeConfirm) {
+        <div class="confirm-box">
+          <p>Are you sure? This key will be permanently deactivated and cannot be recovered.</p>
+          <div class="confirm-actions">
+            <button class="btn-danger" (click)="revoke()" [disabled]="revoking">
+              {{ revoking ? 'Revoking...' : 'Yes, revoke it' }}
+            </button>
+            <button class="btn-secondary" (click)="showRevokeConfirm = false">Cancel</button>
+          </div>
+        </div>
+      }
+
+      <div class="section-title">Audit log</div>
+      <div class="audit-list">
+        @if (logs.length === 0) {
+          <div class="audit-empty">No events yet.</div>
+        }
+        @for (log of logs; track log.id) {
+          <div class="audit-row">
+            <div class="audit-dot" [ngClass]="'dot-' + log.zone"></div>
+            <div class="audit-info">
+              <span class="audit-event">{{ eventLabel(log.event_type) }}</span>
+              <span class="audit-zone">{{ log.zone }}</span>
+            </div>
+            <span class="audit-time">{{ log.created_at | date:'medium' }}</span>
+          </div>
+        }
+      </div>
+    }
+  </main>
+</div>

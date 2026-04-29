@@ -1,0 +1,103 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Node
+node_modules/
+# Build / output
+dist/
+build/
+out/
+.next/
+.nuxt/
+.astro/
+.vercel/
+.cache/
+.public/build/
+.vite/
+
+# Dependency directories created by package managers
+.pnp/
+.pnp.js
+
+# Environment files (may contain secrets)
+.env
+.env.*.local
+
+# Package manager lockfiles (keep if you rely on reproducible installs)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Testing / coverage
+coverage/
+coverage*.json
+.nyc_output/
+.pytest_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+venv.bak/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# SQLite
+*.sqlite3
+*.db
+
+# Docker
+docker-compose.override.yml
+# Secrets and keys
+*.pem
+*.key
+secrets.yml
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Editor swap/temp files
+*~
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# Misc
+coverage/
+.cache/
+
+# Ignore local VS Code settings folder
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

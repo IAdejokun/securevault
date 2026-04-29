@@ -1,0 +1,110 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">SecureVault</div>
+    <nav>
+      <span class="nav-item active">API Keys</span>
+    </nav>
+    <button class="logout-btn" (click)="logout()">Sign out</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h2>API Keys</h2>
+      <button class="btn-primary" (click)="showCreateForm = !showCreateForm">
+        {{ showCreateForm ? 'Cancel' : '+ New Key' }}
+      </button>
+    </div>
+
+    @if (createdKey) {
+      <div class="created-banner">
+        <div class="banner-header">
+          <span class="banner-title">✓ Key created — copy it now. You won't see it again.</span>
+          <button class="banner-close" (click)="dismissCreatedKey()">✕</button>
+        </div>
+        <div class="raw-key-row">
+          <code class="raw-key">{{ createdKey.raw_key }}</code>
+          <button class="btn-copy" (click)="copyRawKey()">
+            {{ rawKeyCopied ? 'Copied!' : 'Copy' }}
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (showCreateForm) {
+      <div class="create-form">
+        <div class="field">
+          <label>Key name</label>
+          <input
+            type="text"
+            [(ngModel)]="newKeyName"
+            placeholder="e.g. prod-webhook"
+          />
+        </div>
+        <div class="field">
+          <label>Zone</label>
+          <select [(ngModel)]="newKeyZone">
+            <option value="public">Public</option>
+            <option value="authenticated">Authenticated</option>
+            <option value="privileged">Privileged</option>
+          </select>
+        </div>
+        @if (createError) {
+          <div class="error">{{ createError }}</div>
+        }
+        <button class="btn-primary" (click)="createKey()" [disabled]="creating">
+          {{ creating ? 'Creating...' : 'Create key' }}
+        </button>
+      </div>
+    }
+
+    @if (loading) {
+      <div class="loading">Loading keys...</div>
+    }
+
+    @if (error) {
+      <div class="error">{{ error }}</div>
+    }
+
+    @if (!loading && !error && keys.length === 0) {
+      <div class="empty">
+        <p>No API keys yet.</p>
+        <button class="btn-primary" (click)="showCreateForm = true">
+          Create your first key
+        </button>
+      </div>
+    }
+
+    @if (!loading && keys.length > 0) {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Key</th>
+              <th>Zone</th>
+              <th>Usage</th>
+              <th>Created</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (key of keys; track key.id) {
+              <tr (click)="goToKey(key.id)" class="key-row">
+                <td class="key-name">{{ key.name }}</td>
+                <td><code>{{ key.display_key }}</code></td>
+                <td>
+                  <span class="badge" [ngClass]="zoneBadgeClass(key.zone)">
+                    {{ key.zone }}
+                  </span>
+                </td>
+                <td>{{ key.usage_count }}</td>
+                <td>{{ key.created_at | date:'mediumDate' }}</td>
+                <td class="arrow">→</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </main>
+</div>
