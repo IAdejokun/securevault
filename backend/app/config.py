@@ -1,6 +1,5 @@
 from functools import lru_cache
 from typing import List
-from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -25,22 +24,17 @@ class Settings(BaseSettings):
 
     # Application
     app_env: str = "development"
-    cors_origins: List[str] = ["http://localhost:4200"]
+    # Stored as a plain comma-separated string — parsed via the property below
+    cors_origins_raw: str = "http://localhost:4200"
 
     # Anomaly detection
     anomaly_model_path: str = "models/isolation_forest.joblib"
     anomaly_score_threshold: int = 75
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def split_cors_origins(cls, v):
-        """
-        Accept either a comma-separated string from env vars
-        or an already-parsed list from .env files.
-        """
-        if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v
+    @property
+    def cors_origins(self) -> List[str]:
+        """Split the comma-separated string into a list of origins."""
+        return [origin.strip() for origin in self.cors_origins_raw.split(",") if origin.strip()]
 
     @property
     def is_production(self) -> bool:
