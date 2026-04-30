@@ -1,9 +1,12 @@
 <div class="layout">
   <aside class="sidebar">
     <div class="logo">SecureVault</div>
-    <nav>
-      <span class="nav-item active">API Keys</span>
-    </nav>
+    <<nav>
+  <span class="nav-item active">API Keys</span>
+  @if (isAdmin) {
+    <span class="nav-item" (click)="goToAdmin()">Admin</span>
+  }
+   </nav>
     <button class="logout-btn" (click)="logout()">Sign out</button>
   </aside>
 

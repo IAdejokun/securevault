@@ -27,6 +27,8 @@ export class DashboardComponent implements OnInit {
   createdKey: ApiKeyCreateResponse | null = null;
   rawKeyCopied = false;
 
+  isAdmin = false;
+
   constructor(
     private keyService: ApiKeyService,
     private auth: AuthService,
@@ -36,6 +38,17 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadKeys();
+
+    this.auth.me().subscribe({
+      next: (user: any) => {
+        this.isAdmin = !!user.is_admin;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  goToAdmin() {
+    this.router.navigate(['/admin']);
   }
 
   loadKeys() {

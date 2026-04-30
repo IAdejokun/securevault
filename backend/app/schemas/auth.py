@@ -28,11 +28,11 @@ class TokenResponse(BaseModel):
 class RefreshRequest(BaseModel):
     refresh_token: str
 
-
 class UserResponse(BaseModel):
     id: str
     email: str
     is_active: bool
+    is_admin: bool
 
     model_config = {"from_attributes": True}
 

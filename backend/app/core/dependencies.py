@@ -156,3 +156,17 @@ def zone3_privileged(
     db.commit()
 
     return user
+
+def admin_required(
+    current_user: User = Depends(zone2_authenticated),
+) -> User:
+    """
+    Admin gate. Builds on zone2 (JWT required) and additionally
+    checks the is_admin flag. Returns 403 if the user is not an admin.
+    """
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
+    return current_user

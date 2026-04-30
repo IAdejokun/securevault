@@ -58,13 +58,14 @@ def create_app() -> FastAPI:
         expose_headers=["X-Request-ID"],
     )
 
-    from app.routers import auth, keys, privileged, audit
+    from app.routers import auth, keys, privileged, audit, admin
 
     app.include_router(auth.router,       prefix="/api/v1/auth",       tags=["auth"])
     app.include_router(keys.router,       prefix="/api/v1/keys",       tags=["keys"])
     app.include_router(privileged.router, prefix="/api/v1/privileged", tags=["privileged"])
     app.include_router(audit.router,      prefix="/api/v1/audit",      tags=["audit"])
-
+    app.include_router(admin.router,      prefix="/api/v1/admin",      tags=["admin"])
+    
     @app.get("/health", tags=["health"])
     def health_check():
         return {"status": "ok", "env": settings.app_env}

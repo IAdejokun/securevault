@@ -1,0 +1,96 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">SecureVault</div>
+    <nav>
+      <span class="nav-item" (click)="goToDashboard()">My keys</span>
+      <span class="nav-item active">Admin</span>
+    </nav>
+    <button class="logout-btn" (click)="logout()">Sign out</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h2>Security Operations</h2>
+        <p class="subtitle">System-wide telemetry · auto-refreshes every 30 seconds</p>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="loading">Loading admin data...</div>
+    }
+
+    @if (error) {
+      <div class="error">{{ error }}</div>
+    }
+
+    @if (stats && !loading) {
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total users</span>
+          <span class="stat-value">{{ stats.total_users }}</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Active keys</span>
+          <span class="stat-value">{{ stats.active_keys }} <span class="stat-sub">/ {{ stats.total_keys }}</span></span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Events (24h)</span>
+          <span class="stat-value">{{ stats.events_24h }}</span>
+        </div>
+        <div class="stat-card stat-warn">
+          <span class="stat-label">Failed logins (24h)</span>
+          <span class="stat-value">{{ stats.failed_logins_24h }}</span>
+        </div>
+        <div class="stat-card stat-danger">
+          <span class="stat-label">Replay attempts (all time)</span>
+          <span class="stat-value">{{ stats.replay_attempts }}</span>
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <div class="card">
+          <div class="card-header">Events by type — last 7 days</div>
+          @if (byType.length === 0) {
+            <div class="empty">No events recorded yet.</div>
+          }
+          @for (row of byType; track row.event_type) {
+            <div class="bar-row">
+              <span class="bar-label">{{ row.event_type }}</span>
+              <div class="bar-track">
+                <div class="bar-fill" [ngClass]="eventClass(row.event_type)" [style.width]="barWidth(row.count)"></div>
+              </div>
+              <span class="bar-count">{{ row.count }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="card">
+          <div class="card-header">Live event feed</div>
+          @if (events.length === 0) {
+            <div class="empty">No events recorded yet.</div>
+          }
+          <div class="event-list">
+            @for (e of events; track e.id) {
+              <div class="event-row">
+                <div class="event-dot" [ngClass]="eventClass(e.event_type)"></div>
+                <div class="event-info">
+                  <div class="event-top">
+                    <span class="event-type">{{ e.event_type }}</span>
+                    <span class="zone-badge" [ngClass]="zoneClass(e.zone)">{{ e.zone }}</span>
+                  </div>
+                  <div class="event-meta">
+                    {{ e.ip_address ?? 'no ip' }} · {{ e.created_at | date:'short' }}
+                    @if (e.anomaly_score !== null) {
+                      · score {{ e.anomaly_score }}
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+</div>
