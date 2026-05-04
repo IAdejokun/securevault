@@ -51,6 +51,10 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/admin']);
   }
 
+  goToPlayground() {
+  this.router.navigate(['/playground']);
+}
+
   loadKeys() {
     this.loading = true;
     this.error = '';

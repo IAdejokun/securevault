@@ -17,6 +17,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
   },
   {
+    path: 'playground',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/playground/playground').then((m) => m.PlaygroundComponent),
+  },
+  {
     path: 'keys/:id',
     canActivate: [authGuard],
     loadComponent: () =>

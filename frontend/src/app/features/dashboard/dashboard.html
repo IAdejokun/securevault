@@ -2,11 +2,12 @@
   <aside class="sidebar">
     <div class="logo">SecureVault</div>
     <nav>
-  <span class="nav-item active">API Keys</span>
+  <span class="nav-item active">My keys</span>
+  <span class="nav-item" (click)="goToPlayground()">Try it</span>
   @if (isAdmin) {
     <span class="nav-item" (click)="goToAdmin()">Admin</span>
   }
-   </nav>
+</nav>
     <button class="logout-btn" (click)="logout()">Sign out</button>
   </aside>
 

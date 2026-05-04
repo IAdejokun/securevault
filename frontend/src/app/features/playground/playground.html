@@ -1,0 +1,120 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">SecureVault</div>
+    <nav>
+      <span class="nav-item" (click)="goToDashboard()">My keys</span>
+      <span class="nav-item active">Try it</span>
+    </nav>
+    <button class="logout-btn" (click)="logout()">Sign out</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <h2>Try your keys</h2>
+      <p class="subtitle">Paste a key from your dashboard and call a real endpoint to see what each zone unlocks.</p>
+    </div>
+
+    <!-- PUBLIC -->
+    <div class="zone-card">
+      <div class="zone-header">
+        <span class="zone-badge badge-public">Public zone</span>
+        <span class="endpoint-tag">GET /api/v1/demo/weather</span>
+      </div>
+      <p class="zone-desc">
+        <strong>Real-world use:</strong> open data anyone with a basic key can read — weather feeds, public product catalogues, status pages.
+      </p>
+      <div class="input-row">
+        <input
+          type="text"
+          [(ngModel)]="publicKey"
+          placeholder="Paste a sv_pub_... key here"
+        />
+        <button class="btn" (click)="testPublic()" [disabled]="publicResult.status === 'loading'">
+          {{ publicResult.status === 'loading' ? 'Calling...' : 'Try it' }}
+        </button>
+      </div>
+      @if (publicResult.status === 'success') {
+        <div class="result success">
+          <div class="result-label">✓ Success</div>
+          <pre>{{ prettyPrint(publicResult.data) }}</pre>
+        </div>
+      }
+      @if (publicResult.status === 'error') {
+        <div class="result error">
+          <div class="result-label">✗ Failed</div>
+          <pre>{{ publicResult.errorMessage }}</pre>
+        </div>
+      }
+    </div>
+
+    <!-- AUTHENTICATED -->
+    <div class="zone-card">
+      <div class="zone-header">
+        <span class="zone-badge badge-auth">Authenticated zone</span>
+        <span class="endpoint-tag">GET /api/v1/demo/profile</span>
+      </div>
+      <p class="zone-desc">
+        <strong>Real-world use:</strong> user-specific data — your orders, billing details, account settings, anything tied to who you are.
+      </p>
+      <div class="input-row">
+        <input
+          type="text"
+          [(ngModel)]="authKey"
+          placeholder="Paste a sv_live_... key here"
+        />
+        <button class="btn" (click)="testAuth()" [disabled]="authResult.status === 'loading'">
+          {{ authResult.status === 'loading' ? 'Calling...' : 'Try it' }}
+        </button>
+      </div>
+      @if (authResult.status === 'success') {
+        <div class="result success">
+          <div class="result-label">✓ Success</div>
+          <pre>{{ prettyPrint(authResult.data) }}</pre>
+        </div>
+      }
+      @if (authResult.status === 'error') {
+        <div class="result error">
+          <div class="result-label">✗ Failed</div>
+          <pre>{{ authResult.errorMessage }}</pre>
+        </div>
+      }
+    </div>
+
+    <!-- PRIVILEGED -->
+    <div class="zone-card">
+      <div class="zone-header">
+        <span class="zone-badge badge-priv">Privileged zone</span>
+        <span class="endpoint-tag">POST /api/v1/demo/admin/reset</span>
+      </div>
+      <p class="zone-desc">
+        <strong>Real-world use:</strong> dangerous operations — factory resets, deleting accounts, mass refunds, anything you'd never let a regular key do.
+      </p>
+      <div class="input-row">
+        <input
+          type="text"
+          [(ngModel)]="privKey"
+          placeholder="Paste a sv_priv... key here"
+        />
+        <button class="btn" (click)="testPriv()" [disabled]="privResult.status === 'loading'">
+          {{ privResult.status === 'loading' ? 'Calling...' : 'Try it' }}
+        </button>
+      </div>
+      @if (privResult.status === 'success') {
+        <div class="result success">
+          <div class="result-label">✓ Success</div>
+          <pre>{{ prettyPrint(privResult.data) }}</pre>
+        </div>
+      }
+      @if (privResult.status === 'error') {
+        <div class="result error">
+          <div class="result-label">✗ Failed</div>
+          <pre>{{ privResult.errorMessage }}</pre>
+        </div>
+      }
+    </div>
+
+    <div class="hint">
+      <strong>Try this:</strong> paste a public key into the Authenticated box. You'll get a 403 — the system enforces zone hierarchy. A higher-zone key can access lower zones, but never the other way around.
+    </div>
+  </main>
+</div>
