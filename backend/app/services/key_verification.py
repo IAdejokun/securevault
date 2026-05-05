@@ -15,19 +15,21 @@ def verify_key_for_zone(
     ip: str,
     user_agent: str,
 ) -> ApiKey:
-    """
-    Verify a raw API key matches an active key in the required zone.
-    Increments usage count and writes an audit log on success.
-    Raises 401 if invalid, 403 if wrong zone.
-    """
-    # Find candidate keys by prefix to narrow the search
+    from fastapi import HTTPException, status
+
     if not raw_key or len(raw_key) < 10:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid API key format",
         )
 
-    prefix = raw_key[:8]
+    # Extract prefix the same way we stored it
+    if '_' in raw_key:
+        last_underscore = raw_key.rfind('_')
+        prefix = raw_key[:last_underscore + 1]
+    else:
+        prefix = raw_key[:7]
+
     candidates = (
         db.query(ApiKey)
         .filter(ApiKey.prefix == prefix, ApiKey.is_active == True)
@@ -52,7 +54,6 @@ def verify_key_for_zone(
             detail="API key has expired",
         )
 
-    # Zone hierarchy check — privileged keys can access lower zones too
     zone_levels = {"public": 1, "authenticated": 2, "privileged": 3}
     if zone_levels[matched_key.zone] < zone_levels[required_zone]:
         raise HTTPException(

@@ -46,11 +46,19 @@ def verify_api_key(raw_key: str, stored_hash: str) -> bool:
 def extract_key_parts(raw_key: str) -> tuple[str, str]:
     """
     Returns (prefix, last_four) from a raw key.
-    Both are safe to store and display in the UI.
-    e.g. "sv_live_3f8a2cb4d1" -> ("sv_live_", "b4d1")
+    Prefix is everything up to and including the last underscore.
+    e.g. 'sv_live_3f8a2cb4d1' -> ('sv_live_', 'b4d1')
+    e.g. 'sv_pub_3f8a2cb4d1' -> ('sv_pub_', 'b4d1')
+    e.g. 'sv_priv3f8a2cb4d1' -> ('sv_priv', 'b4d1')
     """
-    prefix = raw_key[:8]        # "sv_live_"
-    last_four = raw_key[-4:]    # last 4 chars of the random portion
+    if '_' in raw_key:
+        # Find the last underscore position and include it in the prefix
+        last_underscore = raw_key.rfind('_')
+        prefix = raw_key[:last_underscore + 1]
+    else:
+        # Fallback for keys without underscore (sv_priv)
+        prefix = raw_key[:7]
+    last_four = raw_key[-4:]
     return prefix, last_four
 
 
