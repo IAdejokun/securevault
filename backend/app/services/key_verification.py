@@ -1,9 +1,8 @@
 from __future__ import annotations
-from datetime import datetime, timezone
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.core.security import verify_api_key
+from app.core.security import extract_key_parts, verify_api_key
 from app.models.api_key import ApiKey
 from app.models.audit_log import AuditLog, EventType
 
@@ -15,20 +14,13 @@ def verify_key_for_zone(
     ip: str,
     user_agent: str,
 ) -> ApiKey:
-    from fastapi import HTTPException, status
-
     if not raw_key or len(raw_key) < 10:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid API key format",
         )
 
-    # Extract prefix the same way we stored it
-    if '_' in raw_key:
-        last_underscore = raw_key.rfind('_')
-        prefix = raw_key[:last_underscore + 1]
-    else:
-        prefix = raw_key[:7]
+    prefix, _ = extract_key_parts(raw_key)
 
     candidates = (
         db.query(ApiKey)
