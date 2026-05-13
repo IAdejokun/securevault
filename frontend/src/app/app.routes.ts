@@ -3,8 +3,14 @@ import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
+    path: '',
+    loadComponent: () =>
+      import('./features/landing/landing').then((m) => m.LandingComponent),
+  },
+  {
     path: 'login',
-    loadComponent: () => import('./features/auth/login/login').then((m) => m.LoginComponent),
+    loadComponent: () =>
+      import('./features/auth/login/login').then((m) => m.LoginComponent),
   },
   {
     path: 'register',
@@ -14,13 +20,8 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [authGuard],
-    loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
-  },
-  {
-    path: 'playground',
-    canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/playground/playground').then((m) => m.PlaygroundComponent),
+      import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
   },
   {
     path: 'keys/:id',
@@ -29,9 +30,10 @@ export const routes: Routes = [
       import('./features/key-detail/key-detail').then((m) => m.KeyDetailComponent),
   },
   {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
+    path: 'playground',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/playground/playground').then((m) => m.PlaygroundComponent),
   },
   {
     path: 'admin',
@@ -40,6 +42,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: '',
   },
 ];

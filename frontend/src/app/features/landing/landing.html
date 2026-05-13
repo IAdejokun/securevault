@@ -1,0 +1,211 @@
+<div class="landing">
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-text">SecureVault</span>
+      </div>
+      <div class="nav-actions">
+        <button class="nav-link" (click)="scrollTo('how')">How it works</button>
+        <button class="nav-link" (click)="scrollTo('zones')">Zones</button>
+        <button class="btn-ghost" (click)="goToLogin()">Sign in</button>
+        <button class="btn-primary" (click)="goToApp()">Get started</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="badge-pill" #animateOnScroll>
+        <span class="pulse"></span>
+        Built on NIST SP 800-207 Zero Trust Architecture
+      </div>
+
+      <h1 class="hero-title" #animateOnScroll>
+        API keys you can <span class="gradient-text">actually trust</span>.
+      </h1>
+
+      <p class="hero-sub" #animateOnScroll>
+        A self-hosted secrets manager that hashes keys, enforces zone-based access,
+        and catches replay attacks in real time. Every action audited. Every key
+        revocable. Zero blind trust.
+      </p>
+
+      <div class="hero-cta" #animateOnScroll>
+        <button class="btn-primary-lg" (click)="goToApp()">
+          Try the live demo
+          <span class="arrow">→</span>
+        </button>
+        <button class="btn-ghost-lg" (click)="scrollTo('how')">See how it works</button>
+      </div>
+
+      <div class="hero-stats" #animateOnScroll>
+        <div class="stat">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Security zones</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">30s</span>
+          <span class="stat-label">Replay window</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">12</span>
+          <span class="stat-label">Bcrypt rounds</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Audited</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-glow"></div>
+  </section>
+
+  <!-- Problem -->
+  <section class="section section-problem">
+    <div class="section-inner">
+      <div class="section-header" #animateOnScroll>
+        <span class="section-kicker">The problem</span>
+        <h2>API keys are leaking everywhere.</h2>
+        <p class="section-lede">
+          Hardcoded in repos. Pasted in Slack. Buried in dotenv files emailed between developers.
+          When a key leaks, attackers don't just read your data — they impersonate your services.
+        </p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card" #animateOnScroll>
+          <div class="problem-icon icon-red">⚠</div>
+          <h3>No rotation</h3>
+          <p>Keys live forever. One leak from 2019 is still valid today.</p>
+        </div>
+        <div class="problem-card" #animateOnScroll>
+          <div class="problem-icon icon-amber">◐</div>
+          <h3>No audit trail</h3>
+          <p>You can't tell who used a key, when, or from where.</p>
+        </div>
+        <div class="problem-card" #animateOnScroll>
+          <div class="problem-icon icon-purple">⟲</div>
+          <h3>No replay defense</h3>
+          <p>Captured requests can be replayed forever to fool the server.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zones -->
+  <section class="section section-zones" id="zones">
+    <div class="section-inner">
+      <div class="section-header" #animateOnScroll>
+        <span class="section-kicker">The solution</span>
+        <h2>Three zones. One enforced policy per request.</h2>
+        <p class="section-lede">
+          Every endpoint declares which zone it needs. Every request is checked against
+          that zone before business logic runs. Security isn't bolted on — it's the gate.
+        </p>
+      </div>
+
+      <div class="zones-grid">
+        <div class="zone-card zone-public" #animateOnScroll>
+          <div class="zone-label">Zone 1</div>
+          <h3>Public</h3>
+          <p class="zone-tagline">Anyone with a key.</p>
+          <ul class="zone-list">
+            <li>Open catalogues</li>
+            <li>Public read APIs</li>
+            <li>Status endpoints</li>
+          </ul>
+          <code class="zone-key">sv_pub_•••</code>
+        </div>
+
+        <div class="zone-card zone-auth" #animateOnScroll>
+          <div class="zone-label">Zone 2</div>
+          <h3>Authenticated</h3>
+          <p class="zone-tagline">Tied to an account.</p>
+          <ul class="zone-list">
+            <li>User-specific data</li>
+            <li>Billing & settings</li>
+            <li>Per-tenant resources</li>
+          </ul>
+          <code class="zone-key">sv_live_•••</code>
+        </div>
+
+        <div class="zone-card zone-priv" #animateOnScroll>
+          <div class="zone-label">Zone 3</div>
+          <h3>Privileged</h3>
+          <p class="zone-tagline">Replay-protected.</p>
+          <ul class="zone-list">
+            <li>Bulk deletes</li>
+            <li>Key rotation</li>
+            <li>Dangerous admin actions</li>
+          </ul>
+          <code class="zone-key">sv_priv_•••</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section section-how" id="how">
+    <div class="section-inner">
+      <div class="section-header" #animateOnScroll>
+        <span class="section-kicker">How it works</span>
+        <h2>From sign-up to secured request in 60 seconds.</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step" #animateOnScroll>
+          <div class="step-num">01</div>
+          <h3>Create an account</h3>
+          <p>Email and password. Your password is hashed with bcrypt — even we can't read it.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step" #animateOnScroll>
+          <div class="step-num">02</div>
+          <h3>Generate a key</h3>
+          <p>Pick a zone. We show you the raw key exactly once, then store only its hash.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step" #animateOnScroll>
+          <div class="step-num">03</div>
+          <h3>Use it on real endpoints</h3>
+          <p>Paste your key in the playground. Each zone unlocks a different real endpoint.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section section-cta">
+    <div class="cta-card" #animateOnScroll>
+      <h2>See it running.</h2>
+      <p>The full app is live. Create keys, rotate them, watch audit events in real time.</p>
+      <button class="btn-primary-lg" (click)="goToApp()">
+        Open the live app
+        <span class="arrow">→</span>
+      </button>
+      <p class="cta-note">
+        First request takes ~30 seconds — free-tier servers wake on demand.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-text">SecureVault</span>
+      </div>
+      <span class="footer-text">
+        Built with FastAPI · Angular · PostgreSQL · Deployed on Render & Netlify
+      </span>
+    </div>
+  </footer>
+</div>
